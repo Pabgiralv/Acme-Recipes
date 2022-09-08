@@ -14,47 +14,53 @@ import acme.roles.Chef;
 public class ChefPimpamShowService implements AbstractShowService<Chef, Pimpam> {
 	
 	@Autowired
-	protected ChefPimpamRepository repo;
+	protected ChefPimpamRepository repository;
 	
 	@Autowired
 	protected ChefPimpamMoneyExchange chefPimpamMoneyExchange;
-	
+
 	@Override
 	public boolean authorise(final Request<Pimpam> request) {
-		 assert request != null;
+		assert request != null;
+		
+		Pimpam pimpam;
+		int id;
+		int userId;
+		boolean result;
+		
+		id = request.getModel().getInteger("id");
+		pimpam = this.repository.findPimpamById(id);
+		userId = request.getPrincipal().getAccountId();
 
-	        boolean result;
-	        int id;
-	        id = request.getModel().getInteger("id");
-
-	        Pimpam pimpam;
-	        pimpam = this.repo.findPimpamById(id);
-
-	        result = request.isPrincipal(pimpam.getItem().getChef());
-
-	        return result;
+		result = userId == pimpam.getItem().getChef().getUserAccount().getId(); 
+		return result;
+		
 	}
 
 	@Override
 	public Pimpam findOne(final Request<Pimpam> request) {
 		assert request != null;
-		
+		Pimpam result;
 		int id;
-		Pimpam pimpam;
 		
 		id = request.getModel().getInteger("id");
-		pimpam = this.repo.findPimpamById(id);
+		result = this.repository.findPimpamById(id);
 		
-		return pimpam;
+		return result;
 	}
 
 	@Override
 	public void unbind(final Request<Pimpam> request, final Pimpam entity, final Model model) {
 		assert request != null;
-        assert entity != null;
-        assert model != null;
+		assert entity != null;
+		assert model != null;
+				
+		model.setAttribute("itemName", entity.getItem().getName());
+		model.setAttribute("items", this.repository.findItemsByChef(request.getPrincipal().getActiveRoleId()));
+		model.setAttribute("itemId", entity.getItem().getId());
+		model.setAttribute("itemPublished", entity.getItem().getPublished());
 		
-		final String systemCurrency= this.repo.getDefaultCurrency();
+		final String systemCurrency= this.repository.getDefaultCurrency();
 		 MoneyExchange priceExchanged = null;
 	     Integer i=0;
 	        while (priceExchanged == null && i<=50) {
@@ -66,13 +72,7 @@ public class ChefPimpamShowService implements AbstractShowService<Chef, Pimpam> 
 			} catch (final Exception e) {
 				model.setAttribute("money", "API unavailable at the moment");
 			}
-	        
-			model.setAttribute("itemName", entity.getItem().getName());
-			model.setAttribute("items", this.repo.findIngredientByChef(request.getPrincipal().getActiveRoleId()));
-			model.setAttribute("itemId", entity.getItem().getId());
-			model.setAttribute("itemPublished", entity.getItem().getPublished());
-	        
-        request.unbind(entity, model, "acode", "atitle", "adescription", "ainstantationMoment", "astartDate", "aendDate", "abudget", "alink");
+		request.unbind(entity, model, "acode", "atitle", "ainstantationDate", "adescription", "astartDate", "aendDate" ,"abudget", "alink");
 		
 	}
 

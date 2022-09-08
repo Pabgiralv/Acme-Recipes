@@ -52,7 +52,7 @@ public class Pimpam extends AbstractEntity {
 	@NotNull
 	@Past
 	@Temporal(TemporalType.TIMESTAMP)
-	protected Date 						ainstantationMoment;
+	protected Date 						ainstantationDate;
 
 	
 	@Temporal(TemporalType.TIMESTAMP)

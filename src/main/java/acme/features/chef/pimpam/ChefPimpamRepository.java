@@ -31,8 +31,17 @@ public interface ChefPimpamRepository extends AbstractRepository {
 	Chef findChefById(int id);
 	
 	@Query("SELECT i FROM Item i WHERE i.code = :code")
-	Item findItemByCode(String code);
-
+	Item findItemByCode(String code);	
+	
+	@Query("SELECT i FROM Item i WHERE i.id= :id")
+	Item findItemById(Integer id);	
+	
+	@Query("SELECT p FROM Item p WHERE p.code = :code")
+	Pimpam findPimpamByCode(String code);	
+	
+	@Query("SELECT i FROM Item i WHERE i.chef.id = :chefId and i.published = false and i.id NOT IN (select p.item.id from Pimpam p)")
+	Collection<Item> findItemsByChef(Integer chefId);
+	
 	@Query("SELECT sc.acceptedCurrencies from SystemConfiguration sc")
 	String findAcceptedCurrencies();
 	
@@ -46,6 +55,8 @@ public interface ChefPimpamRepository extends AbstractRepository {
     Pimpam findPimpamByAcode(String code);
 
 	@Query("select distinct i from Item i where i.chef.userAccount.id = :chefId and i.itemType=0")
-	Collection<Item> findKitchenUtensilsByChef(Integer chefId);		
+	Collection<Item> findKitchenUtensilsByChef(Integer chefId);	
+	
+	
 }
 
