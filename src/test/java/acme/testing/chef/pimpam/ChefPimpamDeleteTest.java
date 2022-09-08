@@ -6,19 +6,19 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 
 import acme.testing.TestHarness;
 
-public class ChefItemDeleteTest extends TestHarness {
+public class ChefPimpamDeleteTest extends TestHarness {
 
 	@ParameterizedTest
-	@CsvFileSource(resources = "/chef/item/item-delete-ingredient.csv", encoding = "utf-8", numLinesToSkip = 1)
+	@CsvFileSource(resources = "/chef/pimpam/delete-pimpam.csv", encoding = "utf-8", numLinesToSkip = 1)
 	@Order(10)
-	public void positiveTest(final int recordIndex, final String name) {
-		super.signIn("chef1", "chef1");
+	public void positiveTest(final int recordIndex, final String atitle) {
+		super.signIn("chef2", "chef2");
 
-		super.clickOnMenu("Chef", "List my ingredients");
+		super.clickOnMenu("Chef", "List my pimpams");
 		super.checkListingExists();
 		super.checkNotListingEmpty();
 		super.sortListing(0, "asc");
-		super.checkColumnHasValue(recordIndex, 0, name);
+		super.checkColumnHasValue(recordIndex, 0, atitle);
 		super.clickOnListingRecord(recordIndex);
 		super.checkFormExists();
 		super.clickOnSubmit("Delete");

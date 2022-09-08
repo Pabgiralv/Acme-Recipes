@@ -35,7 +35,6 @@ public class ChefPimpamListShowTest extends TestHarness {
 		super.checkInputBoxHasValue("alink", alink);
 		super.checkInputBoxHasValue("itemName", item);
 		
-		
 		super.signOut();
 	}
 

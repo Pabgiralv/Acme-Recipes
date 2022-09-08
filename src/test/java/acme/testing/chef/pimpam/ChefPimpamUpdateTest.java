@@ -1,47 +1,52 @@
+/*
+ * EmployerJobUpdateTest.java
+ *
+ * Copyright (C) 2012-2022 Rafael Corchuelo.
+ *
+ * In keeping with the traditional purpose of furthering education and research, it is
+ * the policy of the copyright owner to permit non-commercial use and redistribution of
+ * this software. It has been tested carefully, but it is not guaranteed for any particular
+ * purposes. The copyright owner does not offer any warranties or representations, nor do
+ * they accept any liabilities with respect to them.
+ */
+
 package acme.testing.chef.pimpam;
 
 import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
 import acme.testing.TestHarness;
 
-public class ChefPimpamCreateTest extends TestHarness {
-	
+public class ChefPimpamUpdateTest extends TestHarness {
+
 	@ParameterizedTest
-	@CsvFileSource(resources = "/chef/pimpam/create-pimpam-positive.csv", encoding = "utf-8", numLinesToSkip = 1)
-	@Order(4)
-	public void positiveChefPimpamCreateTest(final int recordIndex, final String key, final String atitle, final String acode, 
+	@CsvFileSource(resources = "/chef/pimpam/update-pimpam-positive.csv", encoding = "utf-8", numLinesToSkip = 1)
+	@Order(10)
+	public void positiveTest(final int recordIndex, final String key, final String atitle, final String acode, 
 		final String astartDate, final String aendDate, final String adescription, final String abudget, final String alink, final String item) {
 		super.signIn("chef1", "chef1");
 
 		super.clickOnMenu("Chef", "List my pimpams");
-	   
 		super.checkListingExists();
-
-		super.clickOnButton("Create a new pimpam");
+		
+		super.sortListing(0, "asc");
+		super.clickOnListingRecord(recordIndex);
+		
+		super.checkFormExists();
 		
 		super.fillInputBoxIn("atitle", atitle);
-		super.fillInputBoxIn("acode", acode);
 		super.fillInputBoxIn("astartDate", astartDate);
-		super.fillInputBoxIn("aendDate", aendDate);
 		super.fillInputBoxIn("adescription", adescription);
+		super.fillInputBoxIn("aendDate", aendDate);
 		super.fillInputBoxIn("abudget", abudget);
 		super.fillInputBoxIn("alink", alink);
 		
-		super.clickOnSubmit("Create");
-		
-		super.clickOnMenu("Chef", "List my pimpams");
+		super.clickOnSubmit("Update");
 		super.checkListingExists();
-		super.sortListing(0, "asc");
 		
-		super.checkColumnHasValue(recordIndex, 0, atitle);
-		super.checkColumnHasValue(recordIndex, 1, item);
-		super.checkColumnHasValue(recordIndex, 2, abudget);
-
 		super.clickOnListingRecord(recordIndex);
-		super.checkFormExists();
+
 		super.checkInputBoxHasValue("atitle", atitle);
 		super.checkInputBoxHasValue("acode", acode);
 		super.checkInputBoxHasValue("astartDate", astartDate);
@@ -50,51 +55,36 @@ public class ChefPimpamCreateTest extends TestHarness {
 		super.checkInputBoxHasValue("abudget", abudget);
 		super.checkInputBoxHasValue("alink", alink);
 		super.checkInputBoxHasValue("itemName", item);
-			
+		
 		super.signOut();
 	}
-	
+
 	@ParameterizedTest
-	@CsvFileSource(resources = "/chef/pimpam/create-pimpam-negative.csv", encoding = "utf-8", numLinesToSkip = 1)
-	@Order(3)
-	public void negativeChefPimpamCreateTest(final int recordIndex, final String key, final String atitle, final String acode, 
+	@CsvFileSource(resources = "/chef/pimpam/update-pimpam-negative.csv", encoding = "utf-8", numLinesToSkip = 1)
+	@Order(20)
+	public void negativeTest(final int recordIndex, final String key, final String atitle, final String acode, 
 		final String astartDate, final String aendDate, final String adescription, final String abudget, final String alink, final String item) {
 		super.signIn("chef1", "chef1");
 
 		super.clickOnMenu("Chef", "List my pimpams");
+		super.checkListingExists();
 		
-		super.clickOnButton("Create a new pimpam");
+		super.sortListing(0, "asc");
+		super.clickOnListingRecord(recordIndex);
+		
+		super.checkFormExists();
 		
 		super.fillInputBoxIn("atitle", atitle);
-		super.fillInputBoxIn("acode", acode);
 		super.fillInputBoxIn("astartDate", astartDate);
 		super.fillInputBoxIn("aendDate", aendDate);
 		super.fillInputBoxIn("adescription", adescription);
 		super.fillInputBoxIn("abudget", abudget);
 		super.fillInputBoxIn("alink", alink);
 		
-		super.clickOnSubmit("Create");
-
 		super.checkErrorsExist();
+
 		super.signOut();
 	}
 
-	@Test
-	@Order(1)
-	public void hackingTest() {
-		super.navigate("/chef/pimpam/create");
-		super.checkPanicExists();
-
-		super.signIn("administrator", "administrator");
-		super.navigate("/chef/item/create");
-		super.checkPanicExists();
-		super.signOut();
-
-		super.signIn("epicure1", "epicure1");
-		super.navigate("/chef/item/create");
-		super.checkPanicExists();
-		super.signOut();
-	
-	}
 	
 }

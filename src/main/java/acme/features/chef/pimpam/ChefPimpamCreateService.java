@@ -1,8 +1,11 @@
 package acme.features.chef.pimpam;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.commons.lang3.time.DateUtils;
@@ -10,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import acme.components.SpamDetector;
+import acme.entities.item.Item;
+import acme.entities.item.ItemType;
 import acme.entities.pimpam.Pimpam;
 import acme.framework.components.models.Model;
 import acme.framework.controllers.Errors;
@@ -54,7 +59,22 @@ public class ChefPimpamCreateService implements AbstractCreateService<Chef, Pimp
 		assert entity != null;
 		assert model != null;
 		
-		model.setAttribute("items", this.repository.findItemsByChef(request.getPrincipal().getActiveRoleId()));
+		Iterator<Item> items;
+		Collection<Item> itemsFiltered;
+		
+		itemsFiltered = new ArrayList<Item>();
+
+		items = this.repository.findItemsByChef(request.getPrincipal().getActiveRoleId()).iterator();
+		
+		while(items.hasNext()) {
+			Item item;
+			item = items.next();
+			if(item.getItemType() == ItemType.INGREDIENT) {
+				itemsFiltered.add(item);
+			}
+		}
+		
+		model.setAttribute("items", itemsFiltered);
 		
 		request.unbind(entity, model, "acode", "ainstantationDate", "atitle", "adescription", "astartDate", "aendDate" ,"abudget", "alink");
 	}
