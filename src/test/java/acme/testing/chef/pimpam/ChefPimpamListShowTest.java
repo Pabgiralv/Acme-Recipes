@@ -1,6 +1,7 @@
 package acme.testing.chef.pimpam;
 
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
@@ -38,5 +39,21 @@ public class ChefPimpamListShowTest extends TestHarness {
 		super.signOut();
 	}
 
+	@Test
+	@Order(1)
+	public void hackingTest() {
+		super.navigate("/chef/pimpam/list");
+		super.checkPanicExists();
 
+		super.signIn("administrator", "administrator");
+		super.navigate("/chef/pimpam/list");
+		super.checkPanicExists();
+		super.signOut();
+
+		super.signIn("epicure1", "epicure1");
+		super.navigate("/chef/pimpam/list");
+		super.checkPanicExists();
+		super.signOut();
+	
+	}
 }

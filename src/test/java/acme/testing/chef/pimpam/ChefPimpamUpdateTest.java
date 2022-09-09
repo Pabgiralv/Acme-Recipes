@@ -81,6 +81,8 @@ public class ChefPimpamUpdateTest extends TestHarness {
 		super.fillInputBoxIn("abudget", abudget);
 		super.fillInputBoxIn("alink", alink);
 		
+		super.clickOnSubmit("Update");
+		
 		super.checkErrorsExist();
 
 		super.signOut();

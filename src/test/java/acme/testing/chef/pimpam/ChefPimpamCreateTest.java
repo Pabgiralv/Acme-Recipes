@@ -86,12 +86,12 @@ public class ChefPimpamCreateTest extends TestHarness {
 		super.checkPanicExists();
 
 		super.signIn("administrator", "administrator");
-		super.navigate("/chef/item/create");
+		super.navigate("/chef/pimpam/create");
 		super.checkPanicExists();
 		super.signOut();
 
 		super.signIn("epicure1", "epicure1");
-		super.navigate("/chef/item/create");
+		super.navigate("/chef/pimpam/create");
 		super.checkPanicExists();
 		super.signOut();
 	

@@ -85,4 +85,12 @@ public interface AdministratorDashboardRepository extends AbstractRepository {
 
 	@Query("select max(p.budget.amount) from Dish p where p.status = 2")
 	Double maximumBudgetOfDeniedDish();
-}
+	
+	
+	
+	@Query("select count(p) from Pimpam p")
+	Integer totalNumberOfPimpam();	
+	
+	@Query("SELECT p.abudget.currency ,avg(p.abudget.amount),stddev(p.abudget.amount),min(p.abudget.amount),max(p.abudget.amount) FROM Pimpam p GROUP BY p.abudget.currency")
+	List<Object[]> findMetricsPimpamsByCurrency();
+	}
